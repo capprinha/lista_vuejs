@@ -5,7 +5,7 @@ import Formulario from './components/Formulario.vue';
 import ListaDeTarefas from './components/ListaDeTarefas.vue';
 
 const estado = reactive({
-  filtro:'todas',
+  filtro: 'todas',
   tarefaTemp: '',
   tarefas: [
     {
@@ -23,22 +23,22 @@ const estado = reactive({
   ]
 })
 
-const getTarefasPendentes = () =>{
+const getTarefasPendentes = () => {
   return estado.tarefas.filter(tarefa => tarefa.finalizada === false)
 }
 
-const getTarefasFinalizadas = () =>{
+const getTarefasFinalizadas = () => {
   return estado.tarefas.filter(tarefa => tarefa.finalizada === true)
 }
 
-const getTarefasFiltradas = () =>{
+const getTarefasFiltradas = () => {
   const { filtro } = estado;
 
   switch (filtro) {
     case 'pendentes':
-        return getTarefasPendentes();
+      return getTarefasPendentes();
     case 'finalizadas':
-        return getTarefasFinalizadas();
+      return getTarefasFinalizadas();
     default:
       return estado.tarefas
   }
@@ -49,7 +49,7 @@ const cadastrarTarefa = () => {
     titulo: estado.tarefaTemp,
     finalizada: false
   }
-  estado.tarefas.push(tarefaNova)
+  estado.tarefas.push(tarefaNova);
   estado.tarefaTemp = ''
 }
 
@@ -57,14 +57,10 @@ const cadastrarTarefa = () => {
 
 <template>
   <div class="container">
-    <Cabecalho  />
-    <Formulario />
-    <ListaDeTarefas />
+    <Cabecalho :tarefas-pendentes="getTarefasPendentes().length"/>
+    <Formulario  :trocar-filtro="evento => estado.filtro = evento.target.value" :tarefa-temp="estado.tarefaTemp" :edita-tarefa-temp="evento => estado.tarefaTemp = evento.target.value" :cadastrar-tarefa="cadastrarTarefa"/>
+    <ListaDeTarefas :tarefas="getTarefasFiltradas()"/>
   </div>
 </template>
 
-<style scoped>
-.done{
-  text-decoration: line-through;
-}
-</style>
+
